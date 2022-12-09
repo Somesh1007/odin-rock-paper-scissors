@@ -16,7 +16,7 @@
             "Papers": "Rock",
             "Scissors": "Papers"
         }
-        game()
+        playGame()
 
         function getPlayerChoice() {
             let playerChoice = prompt("Enter your choice :", "Rock")
@@ -27,7 +27,7 @@
                 playerChoice = choices[1]
             } else if (equalsIgnoreCase(playerChoice, choices[2])) {
                 playerChoice = choices[2]
-            }else{
+            } else {
                 console.error('Invalid Choice : ' + playerChoice + '. Valid Values: ' + choices);
             }
 
@@ -39,20 +39,30 @@
         }
 
         function playRound(playerSelection, computerSelection) {
-            return winCombinations[playerSelection] === computerSelection ? `You Win! ${playerSelection} beats ${computerSelection}` : `You loose! ${computerSelection} beats ${playerSelection}`
+            if (playerSelection === computerSelection) {
+                return 'Tie!!!'
+            } else {
+                return winCombinations[playerSelection] === computerSelection ? `You Win! ${playerSelection} beats ${computerSelection}` : `You Loose! ${computerSelection} beats ${playerSelection}`
+            }
         }
 
-        function game() {
+        function playGame() {
             let playerWins = 0;
             let computerWins = 0;
             for (let i = 1; i <= 5; i++) {
-                let winner = playRound(getPlayerChoice(), getComputerChoice())
-                console.log(`Round ${i} : ${winner}`);
-                winner.includes('You Win!') ? playerWins++ : computerWins++
+                let result = playRound(getPlayerChoice(), getComputerChoice())
+                console.log(`Round ${i} : ${result}`);
+
+                if(result.includes('You Win')){
+                    playerWins++ 
+                }else if(result.includes('You Loose')){
+                    computerWins++
+                }
             }
             console.log('Player Wins : ' + playerWins)
             console.log('Computer Wins : ' + computerWins);
-            console.log(`Winner : ${(playerWins > computerWins) ? 'Player' : 'Computer'} !!!!!!`);
+            
+            console.log(`Winner : ${(playerWins === computerWins) ? 'Tie' : (playerWins > computerWins) ? 'Player' : 'Computer'} !!!!!!`);
         }
 
         function equalsIgnoreCase(str1, str2) {
