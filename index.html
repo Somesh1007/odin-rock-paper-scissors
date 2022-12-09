@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Papers Scissors</title>
+</head>
+
+<body>
+    <script>
+        let choices = ["Rock", "Papers", "Scissors"]
+        let winCombinations = {
+            "Rock": "Scissors",
+            "Papers": "Rock",
+            "Scissors": "Papers"
+        }
+        game()
+
+        function getPlayerChoice() {
+            let playerChoice = prompt("Enter your choice :", "Rock")
+
+            if (equalsIgnoreCase(playerChoice, choices[0])) {
+                playerChoice = choices[0]
+            } else if (equalsIgnoreCase(playerChoice, choices[1])) {
+                playerChoice = choices[1]
+            } else if (equalsIgnoreCase(playerChoice, choices[2])) {
+                playerChoice = choices[2]
+            }else{
+                console.error('Invalid Choice : ' + playerChoice + '. Valid Values: ' + choices);
+            }
+
+            return playerChoice;
+        }
+
+        function getComputerChoice() {
+            return choices[Math.floor(Math.random() * choices.length)];
+        }
+
+        function playRound(playerSelection, computerSelection) {
+            return winCombinations[playerSelection] === computerSelection ? `You Win! ${playerSelection} beats ${computerSelection}` : `You loose! ${computerSelection} beats ${playerSelection}`
+        }
+
+        function game() {
+            let playerWins = 0;
+            let computerWins = 0;
+            for (let i = 1; i <= 5; i++) {
+                let winner = playRound(getPlayerChoice(), getComputerChoice())
+                console.log(`Round ${i} : ${winner}`);
+                winner.includes('You Win!') ? playerWins++ : computerWins++
+            }
+            console.log('Player Wins : ' + playerWins)
+            console.log('Computer Wins : ' + computerWins);
+            console.log(`Winner : ${(playerWins > computerWins) ? 'Player' : 'Computer'} !!!!!!`);
+        }
+
+        function equalsIgnoreCase(str1, str2) {
+            return (str1.toLowerCase() === str2.toLowerCase());
+        }
+    </script>
+    <div class="header">Rock Papers Scissors Game</div>
+</body>
+
+</html>
