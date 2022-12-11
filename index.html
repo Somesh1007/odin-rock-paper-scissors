@@ -9,6 +9,9 @@
 </head>
 
 <body>
+    <button id="rock">Rock</button>
+    <button id="papers">Papers</button>
+    <button id="scissors">Scissors</button>
     <script>
         let choices = ["Rock", "Papers", "Scissors"]
         let winCombinations = {
@@ -16,60 +19,58 @@
             "Papers": "Rock",
             "Scissors": "Papers"
         }
-        playGame()
 
-        function getPlayerChoice() {
-            let playerChoice = prompt("Enter your choice :", "Rock")
+        let playerWins = 0
+        let computerWins = 0
+        let round = 1
+        const buttons = document.querySelectorAll('button')
+        buttons.forEach(button => { button.addEventListener('click', playRound) })
 
-            if (equalsIgnoreCase(playerChoice, choices[0])) {
-                playerChoice = choices[0]
-            } else if (equalsIgnoreCase(playerChoice, choices[1])) {
-                playerChoice = choices[1]
-            } else if (equalsIgnoreCase(playerChoice, choices[2])) {
-                playerChoice = choices[2]
-            } else {
-                console.error('Invalid Choice : ' + playerChoice + '. Valid Values: ' + choices);
-            }
+        const roundDetails = document.createElement('div.round-details')
+        roundDetails.textContent = ''
+        const result = document.createElement('div.result')
+        roundDetails.style.display = 'block'
+        roundDetails.style.whiteSpace = 'pre'
+        result.style.display = 'block'
+        result.style.whiteSpace = 'pre'
+        result.style.fontSize = '20px'
+        result.style.fontWeight = 'bold'
+        document.body.appendChild(roundDetails)
+        document.body.appendChild(result)
 
-            return playerChoice;
-        }
+
 
         function getComputerChoice() {
             return choices[Math.floor(Math.random() * choices.length)];
         }
 
-        function playRound(playerSelection, computerSelection) {
-            if (playerSelection === computerSelection) {
-                return 'Tie!!!'
+        function playRound(event) {
+            if (playerWins === 5 || computerWins === 5) {
+                let winner = playerWins === 5 ? "Player" : "Computer"
+                result.textContent = `\nWINNER : ${winner} !!!!!!!`
+                buttons.forEach(button => { button.removeEventListener('click', playRound) })
+                return
             } else {
-                return winCombinations[playerSelection] === computerSelection ? `You Win! ${playerSelection} beats ${computerSelection}` : `You Loose! ${computerSelection} beats ${playerSelection}`
-            }
-        }
+                let playerSelection = this.textContent
+                let computerSelection = getComputerChoice()
+                console.log(`Round ${round} : Player Selection is: ${playerSelection}`);
+                console.log(`Round ${round} : Computer Selection is: ${computerSelection}`);
 
-        function playGame() {
-            let playerWins = 0;
-            let computerWins = 0;
-            for (let i = 1; i <= 5; i++) {
-                let result = playRound(getPlayerChoice(), getComputerChoice())
-                console.log(`Round ${i} : ${result}`);
-
-                if(result.includes('You Win')){
-                    playerWins++ 
-                }else if(result.includes('You Loose')){
+                if (playerSelection === computerSelection) {
+                    winner = "Tie!!!"
+                } else if (winCombinations[playerSelection] === computerSelection) {
+                    winner = `You Win! ${playerSelection} beats ${computerSelection}`
+                    playerWins++
+                } else {
+                    winner = `You Loose! ${computerSelection} beats ${playerSelection}`
                     computerWins++
                 }
+                roundDetails.textContent += `\nRound ${round} : ${winner}\n`
+                round++
             }
-            console.log('Player Wins : ' + playerWins)
-            console.log('Computer Wins : ' + computerWins);
-            
-            console.log(`Winner : ${(playerWins === computerWins) ? 'Tie' : (playerWins > computerWins) ? 'Player' : 'Computer'} !!!!!!`);
-        }
-
-        function equalsIgnoreCase(str1, str2) {
-            return (str1.toLowerCase() === str2.toLowerCase());
         }
     </script>
-    <div class="header">Rock Papers Scissors Game</div>
+
 </body>
 
 </html>
